@@ -26,6 +26,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -535,24 +536,35 @@ public class HeritrixSessionImpl implements HeritrixSession {
     @Override
     public boolean jobExists(String jobName) {
         final Document rescanDoc = rescanJobDirectory();
-        final XPath xpath = XPathFactory.newInstance().newXPath();
 
-        NodeList jobs;
-        try {
-            jobs = (NodeList) xpath.evaluate("engine/jobs/value/shortName", rescanDoc,
-                    XPathConstants.NODESET);
-            for (int i = 0; i < jobs.getLength(); i++) {
-                if (jobs.item(i).getFirstChild().getTextContent().equals(jobName)) {
-                    return true;
-                }
-            }
-        } catch (XPathExpressionException e) {
-            LOG.error("could not read the existing jobs", e);
-
-        }
-
-        return false;
-
+        return jobExistsInDocument(jobName, rescanDoc);
     }
+    
+    private boolean jobExistsInDocument(String jobName, Document doc){
+    	 final XPath xpath = XPathFactory.newInstance().newXPath();
+
+         NodeList jobs;
+         try {
+             jobs = (NodeList) xpath.evaluate("engine/jobs/value/shortName", doc,
+                     XPathConstants.NODESET);
+             for (int i = 0; i < jobs.getLength(); i++) {
+                 if (jobs.item(i).getFirstChild().getTextContent().equals(jobName)) {
+                     return true;
+                 }
+             }
+         } catch (XPathExpressionException e) {
+             LOG.error("could not read the existing jobs", e);
+
+         }
+
+         return false;
+    }
+
+	@Override
+	public boolean addJobDirectory(String jobDirectory) {
+		Document response = postXml(this.baseUrl, new BasicNameValuePair("action", "add"), new BasicNameValuePair("addpath", jobDirectory));
+		String jobName = StringUtils.substringAfterLast(jobDirectory, "/");
+		return jobExistsInDocument(jobName, response);
+	}
 
 }

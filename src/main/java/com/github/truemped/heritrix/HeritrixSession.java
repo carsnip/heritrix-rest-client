@@ -70,7 +70,7 @@ public interface HeritrixSession {
     /**
      * Rescan the job directory.
      * 
-     * @return TODO
+     * @return Document Result
      */
     Document rescanJobDirectory();
 
@@ -80,6 +80,13 @@ public interface HeritrixSession {
      * @param jobName Name of the Heritrix Job.
      */
     void createJob(String jobName);
+    
+    /**
+     * Create a new job by specifying the job directory
+     * 
+     * @param jobDirectory
+     */
+    boolean addJobDirectory(String jobDirectory);
 
     /**
      * Check if a job is running.

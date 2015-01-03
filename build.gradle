@@ -63,6 +63,7 @@ repositories {
 dependencies {
 	compile 'org.apache.httpcomponents:httpclient:4.0.1'
 	compile 'org.apache.httpcomponents:httpcore:4.0.1'
+	compile 'commons-lang:commons-lang:2.6'
 	compile 'org.slf4j:slf4j-api:1.7.9'
 	testCompile 'org.slf4j:slf4j-simple:1.7.9'
 

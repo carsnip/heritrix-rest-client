@@ -19,10 +19,7 @@ public class HeritrixSessionImplTests {
 
 	@Test
 	public void selfSignedConstructor() throws Exception {
-		HeritrixSession session = new HeritrixSessionImpl("localhost", 8443, "heritrix", "heritrix");
-		Document result = session.rescanJobDirectory();
-		
-		printDocument(result, System.out);
+		new HeritrixSessionImpl("localhost", 8443, "heritrix", "heritrix");
 	}
 	
 	@Test
@@ -32,6 +29,15 @@ public class HeritrixSessionImplTests {
 		Document result = session.rescanJobDirectory();
 		
 		printDocument(result, System.out);
+	}
+	
+	@Test
+	@Ignore("Requires heritrix to be spun up")
+	public void AddJobDirectory() throws Exception{
+		HeritrixSession session = new HeritrixSessionImpl("localhost", 8443, "heritrix", "heritrix");
+		boolean result = session.addJobDirectory("/opt/heritrix-3.2.0/jobs/newJob1");
+		
+		System.out.println(result);
 	}
 	
 	
