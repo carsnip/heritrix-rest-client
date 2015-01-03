@@ -1,7 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'ivy-publish'
-apply plugin: 'maven'
 apply plugin: 'publishing'
 
 sourceCompatibility = 1.7
@@ -16,7 +15,9 @@ task sourceJar(type: Jar) {
 }
 
 artifacts {
-	archives sourceJar
+	archives(sourceJar){
+		type "source"
+	}
 }
 
 // for publishing to an ivy repository
@@ -73,39 +74,3 @@ model {
 		destination = file("$buildDir/generated-ivy.xml")
 	}
 }
-
-def configurePom(def pom) {
-	pom.project {
-	  name rootProject.name
-	  description 'REST client for Heritrix'
-	  inceptionYear '2014'
-	  packaging 'jar'
-  
-	  url ''
-  
-	  developers {
-		developer {
-		  id 'carsnip'
-		  name 'carsnip'
-		  email 'dev@carsnip.com'
-		}
-	  }
-  
-	  scm {
-		url ''
-	  }
-  
-	  licenses {
-		license {
-		  name 'MIT Licence'
-		  url 'https://github.com/truemped/heritrix-rest-client/blob/master/LICENSE'
-		  distribution 'repo'
-		}
-	  }
-  
-	  properties {
-		setProperty('project.build.sourceEncoding', 'UTF8')
-	  }
-	}
-  }
-  
