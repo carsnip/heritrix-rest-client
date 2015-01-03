@@ -5,6 +5,9 @@ apply plugin: 'publishing'
 
 sourceCompatibility = 1.7
 version = "1.0.0"
+group = "com.github.truemped.heritrix"
+archivesBaseName = "heritrix-rest-client"
+jar.baseName = archivesBaseName
 
 task sourceJar(type: Jar) {
 	from sourceSets.main.java
