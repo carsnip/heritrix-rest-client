@@ -11,12 +11,12 @@ jar.baseName = archivesBaseName
 
 task sourceJar(type: Jar) {
 	from sourceSets.main.java
-	classifier "source"
+	classifier "sources"
 }
 
 artifacts {
 	archives(sourceJar){
-		type "source"
+		type "sources"
 	}
 }
 
@@ -31,7 +31,7 @@ publishing {
 			from components.java
 			
 			artifact (sourceJar) {
-				type 'source'
+				type 'sources'
 				conf 'dev'
 			}
 			configurations {
