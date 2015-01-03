@@ -4,7 +4,7 @@ apply plugin: 'ivy-publish'
 apply plugin: 'publishing'
 
 sourceCompatibility = 1.7
-version = "1.0.0"
+version = "1.0-SNAPSHOT"
 group = "com.github.truemped.heritrix"
 archivesBaseName = "heritrix-rest-client"
 jar.baseName = archivesBaseName
@@ -26,7 +26,7 @@ publishing {
 		ivyJava (IvyPublication) {
 			organisation 'com.github.truemped.heritrix'
 			module 'heritrix-rest-client'
-			revision '1.0.0'
+			revision '1.0-SNAPSHOT'
 						
 			from components.java
 			
