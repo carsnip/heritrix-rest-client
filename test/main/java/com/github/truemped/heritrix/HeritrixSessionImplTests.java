@@ -40,6 +40,37 @@ public class HeritrixSessionImplTests {
 		System.out.println(result);
 	}
 	
+	@Test
+	@Ignore("Requires heritrix to be spun up")
+	public void Stop() throws Exception {
+		String jobName = "newJob";
+		HeritrixSession session = new HeritrixSessionImpl("localhost", 8443, "heritrix", "heritrix");
+		session.pauseJob(jobName);
+		session.terminateJob(jobName);
+		session.tearDownJob(jobName);
+	}
+	
+	@Test
+	@Ignore("Requires heritrix to be spun up")
+	public void Startup() throws HeritrixSessionInitializationException, IOException, TransformerException{
+		String jobName = "newJob";
+		HeritrixSession session = new HeritrixSessionImpl("localhost", 8443, "heritrix", "heritrix");
+		Document status = session.getJobStatus(jobName);
+		printDocument(status, System.out);
+		
+		session.buildJob(jobName);
+		status = session.getJobStatus(jobName);
+		printDocument(status, System.out);
+		
+		session.launchJob(jobName);
+		status = session.getJobStatus(jobName);
+		printDocument(status, System.out);
+		
+		session.unpauseJob(jobName);
+		status = session.getJobStatus(jobName);
+		printDocument(status, System.out);
+	}
+	
 	
 	public static void printDocument(Document doc, OutputStream out) throws IOException, TransformerException {
 	    TransformerFactory tf = TransformerFactory.newInstance();
