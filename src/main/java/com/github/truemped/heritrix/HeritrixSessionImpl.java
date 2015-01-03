@@ -1,17 +1,45 @@
 package com.github.truemped.heritrix;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -23,19 +51,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-import java.io.*;
-import java.security.*;
-import java.security.cert.CertificateException;
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Interface implementation using Apache HTTP Client 4.0.1
  */
@@ -45,7 +60,7 @@ public class HeritrixSessionImpl implements HeritrixSession {
     /**
      * The default http client.
      */
-    private final DefaultHttpClient client;
+    private final HttpClient client;
 
     /**
      * Heritrix' base url.
@@ -55,15 +70,32 @@ public class HeritrixSessionImpl implements HeritrixSession {
     /**
      *
      */
-    private final DocumentBuilder documentBuilder;
+    private DocumentBuilder documentBuilder;
 
     /**
      * My logger.
      */
     private final static Logger LOG = LoggerFactory.getLogger(HeritrixSessionImpl.class);
-
+    
     /**
-     * C'tor initializing the Heritrix session.
+     * Create a heritrix Session that trusts all SSL certificates, avoiding the need to create a keyStore for self
+     * signed certificates
+     * 
+     * @param hostname
+     * @param port
+     * @param userName
+     * @param password
+     * @throws HeritrixSessionInitializationException
+     */
+    public HeritrixSessionImpl(final String hostname, final int port, final String userName, final String password) 
+    		throws HeritrixSessionInitializationException {
+    	
+    	this(buildSelfSignedHTTPSScheme(port), hostname, userName, password);
+
+    }
+    
+    /**
+     * Constructor initializing the Heritrix session.
      *
      * @param keystoreFile The {@link java.io.File} containing the SSL certificates.
      * @param keyStorePassword A password for the keystore file.
@@ -77,68 +109,109 @@ public class HeritrixSessionImpl implements HeritrixSession {
     public HeritrixSessionImpl(final File keystoreFile, final String keyStorePassword,
             final String hostname, final int port, final String userName, final String password)
             throws HeritrixSessionInitializationException {
+    		this(buildKeystoreHttpsScheme(keystoreFile, keyStorePassword, port), hostname, userName, password);
+    }
+    
+    public HeritrixSessionImpl(Scheme httpsScheme, final String hostname, final String userName, final String password) throws HeritrixSessionInitializationException {
+	    this.client = buildHttpClient(httpsScheme, hostname, userName, password);
+	    this.baseUrl = "https://" + hostname + ":" + Integer.toString(httpsScheme.getDefaultPort()) + "/engine/";
+	
+		try {
+		    this.documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		} catch (ParserConfigurationException e) {
+		    String msg = "Error getting a XML document builder!";
+		    LOG.error(msg, e);
+		    throw new HeritrixSessionInitializationException(msg, e);
+		}
+    }
+    
+    private static Scheme buildSelfSignedHTTPSScheme(final int port) throws HeritrixSessionInitializationException {
+    	SSLContext sslContext = null;
+    	try {
+			sslContext = SSLContext.getInstance("SSL");
+		} catch (NoSuchAlgorithmException e) {
+			throw new HeritrixSessionInitializationException("Could not create SSL Context", e);
+		}
+    	
+    	try {
+			sslContext.init(null, new TrustManager[]{
+					new javax.net.ssl.X509TrustManager() {
+						@Override
+						public X509Certificate[] getAcceptedIssuers() {	return null; }
+						
+						@Override
+						public void checkServerTrusted(X509Certificate[] arg0, String arg1)	throws CertificateException { }
+						
+						@Override
+						public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException { }
+					}
+			}, new java.security.SecureRandom());
+			
+		} catch (KeyManagementException e) {
+			throw new HeritrixSessionInitializationException("Could not init SSL Context", e);
+		}
 
-        KeyStore trust;
-        SSLSocketFactory socketFactory;
-        Scheme sch;
+    	SSLSocketFactory sf = new SSLSocketFactory(sslContext);
+    	sf.setHostnameVerifier(new AllowAllHostnameVerifier());
+    	
+    	return new Scheme("https", sf, port);
+    }
+    
+    private static Scheme buildKeystoreHttpsScheme(final File keystoreFile, final String keyStorePassword, final int port) throws HeritrixSessionInitializationException{
+    	 KeyStore trust;
+         SSLSocketFactory socketFactory;
 
-        try {
-            trust = KeyStore.getInstance(KeyStore.getDefaultType());
-            InputStream instream;
-            try {
-                instream = new FileInputStream(keystoreFile);
-                try {
-                    trust.load(instream, keyStorePassword.toCharArray());
-                } catch (NoSuchAlgorithmException e) {
-                    LOG.error("Cannot load the trustfile!", e);
-                } catch (CertificateException e) {
-                    LOG.error("Cannot load the trustfile!", e);
-                } catch (IOException e) {
-                    LOG.error("Cannot load the trustfile!", e);
-                } finally {
-                    instream.close();
-                }
-            } catch (FileNotFoundException e) {
-                LOG.error("Cannot load the trustfile!", e);
-            } catch (IOException e) {
-                LOG.error("Cannot load the trustfile!", e);
-            }
+         try {
+	         trust = KeyStore.getInstance(KeyStore.getDefaultType());
+	         InputStream instream;
+	         try {
+	             instream = new FileInputStream(keystoreFile);
+	             try {
+	                 trust.load(instream, keyStorePassword.toCharArray());
+	             } catch (NoSuchAlgorithmException e) {
+	                 LOG.error("Cannot load the trustfile!", e);
+	             } catch (CertificateException e) {
+	                 LOG.error("Cannot load the trustfile!", e);
+	             } catch (IOException e) {
+	                 LOG.error("Cannot load the trustfile!", e);
+	             } finally {
+	                 instream.close();
+	             }
+	         } catch (FileNotFoundException e) {
+	             LOG.error("Cannot load the trustfile!", e);
+	         } catch (IOException e) {
+	             LOG.error("Cannot load the trustfile!", e);
+	         }
+	
+	         socketFactory = new SSLSocketFactory(trust);
+	         return new Scheme("https", socketFactory, port);
+         } catch (KeyStoreException e) {
+             String msg = "Error with the keystore!";
+             LOG.error(msg, e);
+             throw new HeritrixSessionInitializationException(msg, e);
+         } catch (UnrecoverableKeyException e) {
+             String msg = "Error with the keystore!";
+             LOG.error(msg, e);
+             throw new HeritrixSessionInitializationException(msg, e);
+         } catch (KeyManagementException e) {
+             String msg = "Error with the keystore!";
+             LOG.error(msg, e);
+             throw new HeritrixSessionInitializationException(msg, e);
+         } catch (NoSuchAlgorithmException e) {
+             String msg = "Error with the keystore!";
+             LOG.error(msg, e);
+             throw new HeritrixSessionInitializationException(msg, e);
+         }
+    }
+    
+    private static HttpClient buildHttpClient(Scheme httpsScheme, final String hostname, final String userName, final String password)
+            throws HeritrixSessionInitializationException {
 
-            socketFactory = new SSLSocketFactory(trust);
-            sch = new Scheme("https", socketFactory, port);
-
-            this.client = new DefaultHttpClient();
-            this.client.getConnectionManager().getSchemeRegistry().register(sch);
-            this.client.getCredentialsProvider().setCredentials(new AuthScope(hostname, port),
+    		DefaultHttpClient client = new DefaultHttpClient();
+            client.getConnectionManager().getSchemeRegistry().register(httpsScheme);
+            client.getCredentialsProvider().setCredentials(new AuthScope(hostname, httpsScheme.getDefaultPort()),
                     new UsernamePasswordCredentials(userName, password));
-
-            this.baseUrl = "https://" + hostname + ":" + Integer.toString(port) + "/engine/";
-
-        } catch (KeyStoreException e) {
-            String msg = "Error with the keystore!";
-            LOG.error(msg, e);
-            throw new HeritrixSessionInitializationException(msg, e);
-        } catch (KeyManagementException e) {
-            String msg = "Error with the keystore!";
-            LOG.error(msg, e);
-            throw new HeritrixSessionInitializationException(msg, e);
-        } catch (UnrecoverableKeyException e) {
-            String msg = "Error with the keystore!";
-            LOG.error(msg, e);
-            throw new HeritrixSessionInitializationException(msg, e);
-        } catch (NoSuchAlgorithmException e) {
-            String msg = "Error with the keystore!";
-            LOG.error(msg, e);
-            throw new HeritrixSessionInitializationException(msg, e);
-        }
-
-        try {
-            this.documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        } catch (ParserConfigurationException e) {
-            String msg = "Error getting a XML document builder!";
-            LOG.error(msg, e);
-            throw new HeritrixSessionInitializationException(msg, e);
-        }
+            return client;
     }
 
     /**

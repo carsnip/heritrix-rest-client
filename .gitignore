@@ -1,2 +1,7 @@
 .idea
 *.iml
+/bin
+.classpath
+.gradle
+.settings
+.project
