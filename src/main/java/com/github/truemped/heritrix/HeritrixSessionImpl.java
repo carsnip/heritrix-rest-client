@@ -26,6 +26,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -238,7 +239,12 @@ public class HeritrixSessionImpl implements HeritrixSession {
         try {
             final HttpResponse response = execute(request);
             final HttpEntity entity = response.getEntity();
-
+            int status = response.getStatusLine().getStatusCode();
+            if (status != 200){
+            	String responseContent = IOUtils.toString(entity.getContent());
+            	LOG.error("Error from server, status: " + status + ", url: " + request.getRequestLine() + ", content: " + responseContent);
+            	return null;
+            }
             return this.documentBuilder.parse(entity.getContent());
 
         } catch (ClientProtocolException e) {
@@ -359,6 +365,22 @@ public class HeritrixSessionImpl implements HeritrixSession {
 
         return isRunning;
     }
+    
+    private boolean isJobRunningOrPaused(final String jobName) {
+        final Document d = getJobStatus(jobName);
+        final XPath xPath = XPathFactory.newInstance().newXPath();
+        boolean isRunningOrPaused = false;
+        try {
+            final String res = xPath.evaluate("//job/statusDescription", d);
+            if (res.equals("Active: RUNNING") || res.equals("Active: PAUSED")) {
+                isRunningOrPaused = true;
+            }
+        } catch (XPathExpressionException e) {
+            LOG.error("could not read status from jobdescription", e);
+        }
+
+        return isRunningOrPaused;
+    }
 
     /**
      * @see com.github.truemped.heritrix.HeritrixSession#isPaused(String)
@@ -453,7 +475,6 @@ public class HeritrixSessionImpl implements HeritrixSession {
     public boolean launchJob(final String jobName) {
         final Document doc = postXml(this.baseUrl + "job/" + jobName, new BasicNameValuePair("action", "launch"));
         final XPath xpath = XPathFactory.newInstance().newXPath();
-
         NodeList jobs;
         try {
             jobs = (NodeList) xpath.evaluate("job/statusDescription", doc, XPathConstants.NODESET);
@@ -475,7 +496,7 @@ public class HeritrixSessionImpl implements HeritrixSession {
      */
     @Override
     public void terminateJob(final String jobName) {
-        if (isJobRunning(jobName)) {
+        if (isJobRunningOrPaused(jobName)) {
             postXml(this.baseUrl + "job/" + jobName, new BasicNameValuePair("action", "terminate"));
         } else {
             LOG.info("job is not running");
@@ -566,5 +587,5 @@ public class HeritrixSessionImpl implements HeritrixSession {
 		String jobName = StringUtils.substringAfterLast(jobDirectory, "/");
 		return jobExistsInDocument(jobName, response);
 	}
-
+	
 }

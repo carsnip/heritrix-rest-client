@@ -41,7 +41,7 @@ public class HeritrixSessionImplTests {
 	}
 	
 	@Test
-	@Ignore("Requires heritrix to be spun up")
+	//@Ignore("Requires heritrix to be spun up")
 	public void Stop() throws Exception {
 		String jobName = "newJob";
 		HeritrixSession session = new HeritrixSessionImpl("localhost", 8443, "heritrix", "heritrix");
@@ -51,23 +51,25 @@ public class HeritrixSessionImplTests {
 	}
 	
 	@Test
-	@Ignore("Requires heritrix to be spun up")
-	public void Startup() throws HeritrixSessionInitializationException, IOException, TransformerException{
+	//@Ignore("Requires heritrix to be spun up")
+	public void Startup() throws Exception{
 		String jobName = "newJob";
 		HeritrixSession session = new HeritrixSessionImpl("localhost", 8443, "heritrix", "heritrix");
-		Document status = session.getJobStatus(jobName);
-		printDocument(status, System.out);
+//		Document status = session.getJobStatus(jobName);
 		
+		System.out.println("build");
 		session.buildJob(jobName);
-		status = session.getJobStatus(jobName);
-		printDocument(status, System.out);
+//		status = session.getJobStatus(jobName);
+//		printDocument(status, System.out);
 		
+		System.out.println("launch");
 		session.launchJob(jobName);
-		status = session.getJobStatus(jobName);
-		printDocument(status, System.out);
+//		status = session.getJobStatus(jobName);
+//		printDocument(status, System.out);
 		
+		System.out.println("unpause");
 		session.unpauseJob(jobName);
-		status = session.getJobStatus(jobName);
+		Document status = session.getJobStatus(jobName);
 		printDocument(status, System.out);
 	}
 	
