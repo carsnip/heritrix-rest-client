@@ -41,7 +41,7 @@ public class HeritrixSessionImplTests {
 	}
 	
 	@Test
-	//@Ignore("Requires heritrix to be spun up")
+	@Ignore("Requires heritrix to be spun up")
 	public void Stop() throws Exception {
 		String jobName = "newJob";
 		HeritrixSession session = new HeritrixSessionImpl("localhost", 8443, "heritrix", "heritrix");
@@ -51,7 +51,7 @@ public class HeritrixSessionImplTests {
 	}
 	
 	@Test
-	//@Ignore("Requires heritrix to be spun up")
+	@Ignore("Requires heritrix to be spun up")
 	public void Startup() throws Exception{
 		String jobName = "newJob";
 		HeritrixSession session = new HeritrixSessionImpl("localhost", 8443, "heritrix", "heritrix");
