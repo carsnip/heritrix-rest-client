@@ -1,5 +1,7 @@
 package com.github.truemped.heritrix;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -245,7 +247,9 @@ public class HeritrixSessionImpl implements HeritrixSession {
             	LOG.error("Error from server, status: " + status + ", url: " + request.getRequestLine() + ", content: " + responseContent);
             	return null;
             }
-            return this.documentBuilder.parse(entity.getContent());
+            //InputStream responseContent = debugContent(entity.getContent());
+            InputStream responseContent = entity.getContent();
+            return this.documentBuilder.parse(responseContent);
 
         } catch (ClientProtocolException e) {
             LOG.error("Error connecting to the server", e);
@@ -257,7 +261,14 @@ public class HeritrixSessionImpl implements HeritrixSession {
             LOG.error("Cannot parse returning XML. Url was: " + request.getRequestLine(), e);
         }
         return null;
-
+    }
+    
+    @SuppressWarnings("unused")
+	private InputStream debugContent(InputStream content) throws IOException{
+    	ByteArrayOutputStream output = new ByteArrayOutputStream();
+    	IOUtils.copy(content, output);
+    	System.out.println(output.toString());
+    	return new ByteArrayInputStream(output.toByteArray());
     }
 
     /**
@@ -345,6 +356,23 @@ public class HeritrixSessionImpl implements HeritrixSession {
     public Document getJobStatus(final String jobName) {
         return getXml(this.baseUrl + "job/" + jobName);
     }
+    
+    private boolean checkStatusDocument(Document doc, String ... status){
+    	final XPath xPath = XPathFactory.newInstance().newXPath();
+        try {
+        	final String res = xPath.evaluate("//job/statusDescription", doc);
+        	for (String st : status) {
+				if (st.equals(res)){
+					return true;
+				}
+			}
+        } catch (XPathExpressionException e) {
+            LOG.error("status document not in expected format", e);
+
+        }
+
+        return false;
+    }
 
     /**
      * @see com.github.truemped.heritrix.HeritrixSession#isJobRunning(String)
@@ -352,34 +380,12 @@ public class HeritrixSessionImpl implements HeritrixSession {
     @Override
     public boolean isJobRunning(final String jobName) {
         final Document d = getJobStatus(jobName);
-        final XPath xPath = XPathFactory.newInstance().newXPath();
-        boolean isRunning = false;
-        try {
-            final String res = xPath.evaluate("//job/statusDescription", d);
-            if (res.equals("Active: RUNNING")) {
-                isRunning = true;
-            }
-        } catch (XPathExpressionException e) {
-            LOG.error("could not read status from jobdescription", e);
-        }
-
-        return isRunning;
-    }
+        return checkStatusDocument(d, "Active: RUNNING");
+      }
     
     private boolean isJobRunningOrPaused(final String jobName) {
         final Document d = getJobStatus(jobName);
-        final XPath xPath = XPathFactory.newInstance().newXPath();
-        boolean isRunningOrPaused = false;
-        try {
-            final String res = xPath.evaluate("//job/statusDescription", d);
-            if (res.equals("Active: RUNNING") || res.equals("Active: PAUSED")) {
-                isRunningOrPaused = true;
-            }
-        } catch (XPathExpressionException e) {
-            LOG.error("could not read status from jobdescription", e);
-        }
-
-        return isRunningOrPaused;
+        return checkStatusDocument(d, "Active: RUNNING","Active: PAUSED");
     }
 
     /**
@@ -387,19 +393,8 @@ public class HeritrixSessionImpl implements HeritrixSession {
      */
     @Override
     public boolean isPaused(final String jobName) {
-        final Document d = getJobStatus(jobName);
-        final XPath xPath = XPathFactory.newInstance().newXPath();
-        boolean isRunning = false;
-        try {
-            final String res = xPath.evaluate("//job/statusDescription", d);
-            if (res.equals("Active: PAUSED")) {
-                isRunning = true;
-            }
-        } catch (XPathExpressionException e) {
-            LOG.error("could not read status from jobdescription", e);
-        }
-
-        return isRunning;
+    	final Document d = getJobStatus(jobName);
+        return checkStatusDocument(d, "Active: PAUSED");
     }
 
     /**
@@ -450,22 +445,7 @@ public class HeritrixSessionImpl implements HeritrixSession {
     @Override
     public boolean buildJob(final String jobName) {
         final Document doc = postXml(this.baseUrl + "job/" + jobName, new BasicNameValuePair("action", "build"));
-        final XPath xpath = XPathFactory.newInstance().newXPath();
-
-        NodeList jobs;
-        try {
-            jobs = (NodeList) xpath.evaluate("job/statusDescription", doc, XPathConstants.NODESET);
-            for (int i = 0; i < jobs.getLength(); i++) {
-                if (jobs.item(i).getFirstChild().getTextContent().equals("Unbuilt")) {
-                    return false;
-                }
-            }
-        } catch (XPathExpressionException e) {
-            LOG.error("could not read the existing jobs", e);
-
-        }
-
-        return true;
+        return checkStatusDocument(doc, "Ready");
     }
 
     /**
@@ -474,22 +454,10 @@ public class HeritrixSessionImpl implements HeritrixSession {
     @Override
     public boolean launchJob(final String jobName) {
         final Document doc = postXml(this.baseUrl + "job/" + jobName, new BasicNameValuePair("action", "launch"));
-        final XPath xpath = XPathFactory.newInstance().newXPath();
-        NodeList jobs;
-        try {
-            jobs = (NodeList) xpath.evaluate("job/statusDescription", doc, XPathConstants.NODESET);
-            for (int i = 0; i < jobs.getLength(); i++) {
-                if (jobs.item(i).getFirstChild().getTextContent().equals("Ready")) {
-                    return true;
-                }
-            }
-        } catch (XPathExpressionException e) {
-            LOG.error("could not read the existing jobs", e);
-
-        }
-
-        return false;
+        return checkStatusDocument(doc, "Active: PREPARING");
     }
+    
+   
 
     /**
      * @see com.github.truemped.heritrix.HeritrixSession#terminateJob(String)
@@ -547,6 +515,7 @@ public class HeritrixSessionImpl implements HeritrixSession {
      */
     @Override
     public HttpResponse getCrawlLog(String jobName) {
+    	// this is wrong - crawl log can be elsewhere!
         return get(this.baseUrl + "job/" + jobName + "/jobdir/logs/crawl.log");
 
     }

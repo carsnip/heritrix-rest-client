@@ -59,18 +59,21 @@ public class HeritrixSessionImplTests {
 		
 		System.out.println("build");
 		session.buildJob(jobName);
+		
 //		status = session.getJobStatus(jobName);
 //		printDocument(status, System.out);
 		
 		System.out.println("launch");
-		session.launchJob(jobName);
+		boolean result = session.launchJob(jobName);
+		System.out.println("status");
+		session.getJobStatus(jobName);
 //		status = session.getJobStatus(jobName);
 //		printDocument(status, System.out);
 		
 		System.out.println("unpause");
 		session.unpauseJob(jobName);
-		Document status = session.getJobStatus(jobName);
-		printDocument(status, System.out);
+		System.out.println("status");
+		session.getJobStatus(jobName);
 	}
 	
 	
