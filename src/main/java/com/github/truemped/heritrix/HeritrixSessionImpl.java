@@ -247,8 +247,7 @@ public class HeritrixSessionImpl implements HeritrixSession {
             	LOG.error("Error from server, status: " + status + ", url: " + request.getRequestLine() + ", content: " + responseContent);
             	return null;
             }
-            //InputStream responseContent = debugContent(entity.getContent());
-            InputStream responseContent = entity.getContent();
+            InputStream responseContent = LOG.isDebugEnabled() ? debugContent(entity.getContent()) : entity.getContent();
             return this.documentBuilder.parse(responseContent);
 
         } catch (ClientProtocolException e) {
@@ -263,11 +262,10 @@ public class HeritrixSessionImpl implements HeritrixSession {
         return null;
     }
     
-    @SuppressWarnings("unused")
 	private InputStream debugContent(InputStream content) throws IOException{
     	ByteArrayOutputStream output = new ByteArrayOutputStream();
     	IOUtils.copy(content, output);
-    	System.out.println(output.toString());
+    	LOG.debug("RESPONSE CONTENT: " + output.toString());
     	return new ByteArrayInputStream(output.toByteArray());
     }
 
