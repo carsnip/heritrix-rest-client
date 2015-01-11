@@ -103,6 +103,8 @@ public interface HeritrixSession {
      * @return The parsed XML.
      */
     Document getJobStatus(String jobName);
+    
+    String getJobStatusDescription(String jobName);
 
     /**
      * Return the complete crawl log.

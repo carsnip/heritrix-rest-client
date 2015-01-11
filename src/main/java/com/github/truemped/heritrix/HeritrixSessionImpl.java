@@ -355,6 +355,18 @@ public class HeritrixSessionImpl implements HeritrixSession {
         return getXml(this.baseUrl + "job/" + jobName);
     }
     
+    @Override
+    public String getJobStatusDescription(final String jobName) {
+    	Document doc = getJobStatus(jobName);
+    	final XPath xPath = XPathFactory.newInstance().newXPath();
+        try {
+        	return xPath.evaluate("//job/statusDescription", doc);
+        } catch (XPathExpressionException e) {
+            LOG.error("status document not in expected format", e);
+            return null;
+        }
+    }
+    
     private boolean checkStatusDocument(Document doc, String ... status){
     	final XPath xPath = XPathFactory.newInstance().newXPath();
         try {
