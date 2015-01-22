@@ -137,4 +137,12 @@ public interface HeritrixSession {
      */
     boolean isPaused(String jobName);
 
+    /**
+     * Create a job status report from the XML
+     * @param jobName
+     * @param processAllStatistics 
+     * @return
+     */
+	JobStatusReport getJobStatusReport(String jobName);
+
 }

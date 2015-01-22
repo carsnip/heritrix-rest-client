@@ -356,6 +356,15 @@ public class HeritrixSessionImpl implements HeritrixSession {
     }
     
     @Override
+    public JobStatusReport getJobStatusReport(String jobName)
+    {
+    	Document document = getJobStatus(jobName);
+    	
+    	return JobStatusReport.fromDocument(document);
+    	
+    }
+    
+    @Override
     public String getJobStatusDescription(final String jobName) {
     	Document doc = getJobStatus(jobName);
     	final XPath xPath = XPathFactory.newInstance().newXPath();
