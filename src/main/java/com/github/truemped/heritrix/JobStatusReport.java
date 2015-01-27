@@ -1,11 +1,15 @@
 package com.github.truemped.heritrix;
 
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.util.List;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -16,6 +20,7 @@ import org.w3c.dom.Document;
  */
 public class JobStatusReport {
 	private static final Logger logger = LoggerFactory.getLogger(JobStatusReport.class);
+	private static final Integer INITIAL_INT_VALUE = -1;
 	
 	// identify the job
 	private String job;
@@ -27,53 +32,53 @@ public class JobStatusReport {
 	private String warcWriterDirectory;
 
 	// uri totals report
-	private int downloadedUriCount;
-	private int queuedUriCount;
-	private int totalUriCount;
-	private int futureUriCount;
+	private Integer downloadedUriCount;
+	private Integer queuedUriCount;
+	private Integer totalUriCount;
+	private Integer futureUriCount;
 
 	// size totals report
-	private int dupByHash;
-	private int dupByHashCount;
-	private int notModified;
-	private int notModifiedCount;
-	private int novel;
-	private int novelCount;
-	private int total;
-	private int totalCount;
+	private Integer dupByHash;
+	private Integer dupByHashCount;
+	private Integer notModified;
+	private Integer notModifiedCount;
+	private Integer novel;
+	private Integer novelCount;
+	private Integer total;
+	private Integer totalCount;
 
 	// rate report
-	private double currentDocsPerSecond;
-	private double averageDocsPerSecond;
-	private int currentKiBPerSec;
-	private int averageKiBPerSec;
+	private Double currentDocsPerSecond;
+	private Double averageDocsPerSecond;
+	private Integer currentKiBPerSec;
+	private Integer averageKiBPerSec;
 
 	// load report
-	private int busyThreads;
-	private int totalThreads;
-	private double congestionRatio;
-	private int averageQueueDepth;
-	private int deepestQueueDepth;
+	private Integer busyThreads;
+	private Integer totalThreads;
+	private Double congestionRatio;
+	private Integer averageQueueDepth;
+	private Integer deepestQueueDepth;
 
 	// elapsed report
-	private int elapsedMilliseconds;
+	private Integer elapsedMilliseconds;
 	private String elapsedPretty;
 
 	// thread report
-	private int toeCount;
+	private Integer toeCount;
 	private List<String> steps; // might need to contain an enum
 	private List<String> processors; // might need to contain an enum
 
 	// frontier report
-	private int totalQueues;
-	private int inProcessQueues;
-	private int readyQueues;
-	private int snoozedQueues;
-	private int activeQueues;
-	private int inactiveQueues;
-	private int ineligibleQueues;
-	private int retiredQueues;
-	private int exhaustedQueues;
+	private Integer totalQueues;
+	private Integer inProcessQueues;
+	private Integer readyQueues;
+	private Integer snoozedQueues;
+	private Integer activeQueues;
+	private Integer inactiveQueues;
+	private Integer ineligibleQueues;
+	private Integer retiredQueues;
+	private Integer exhaustedQueues;
 	private String lastReachedState; // might need to use an enum
 	
 	
@@ -90,91 +95,91 @@ public class JobStatusReport {
 		return warcWriterDirectory;
 	}
 
-	public int getDownloadedUriCount() {
+	public Integer getDownloadedUriCount() {
 		return downloadedUriCount;
 	}
 
-	public int getQueuedUriCount() {
+	public Integer getQueuedUriCount() {
 		return queuedUriCount;
 	}
 
-	public int getTotalUriCount() {
+	public Integer getTotalUriCount() {
 		return totalUriCount;
 	}
 
-	public int getFutureUriCount() {
+	public Integer getFutureUriCount() {
 		return futureUriCount;
 	}
 
-	public int getDupByHash() {
+	public Integer getDupByHash() {
 		return dupByHash;
 	}
 
-	public int getDupByHashCount() {
+	public Integer getDupByHashCount() {
 		return dupByHashCount;
 	}
 
-	public int getNotModified() {
+	public Integer getNotModified() {
 		return notModified;
 	}
 
-	public int getNotModifiedCount() {
+	public Integer getNotModifiedCount() {
 		return notModifiedCount;
 	}
 
-	public int getNovel() {
+	public Integer getNovel() {
 		return novel;
 	}
 
-	public int getNovelCount() {
+	public Integer getNovelCount() {
 		return novelCount;
 	}
 
-	public int getTotal() {
+	public Integer getTotal() {
 		return total;
 	}
 
-	public int getTotalCount() {
+	public Integer getTotalCount() {
 		return totalCount;
 	}
 
-	public double getCurrentDocsPerSecond() {
+	public Double getCurrentDocsPerSecond() {
 		return currentDocsPerSecond;
 	}
 
-	public double getAverageDocsPerSecond() {
+	public Double getAverageDocsPerSecond() {
 		return averageDocsPerSecond;
 	}
 
-	public int getCurrentKiBPerSec() {
+	public Integer getCurrentKiBPerSec() {
 		return currentKiBPerSec;
 	}
 
-	public int getAverageKiBPerSec() {
+	public Integer getAverageKiBPerSec() {
 		return averageKiBPerSec;
 	}
 
-	public int getBusyThreads() {
+	public Integer getBusyThreads() {
 		return busyThreads;
 	}
 
-	public int getTotalThreads() {
+	public Integer getTotalThreads() {
 		return totalThreads;
 	}
 
-	public double getCongestionRatio() {
+	public Double getCongestionRatio() {
 		return congestionRatio;
 	}
 
-	public int getAverageQueueDepth() {
+	public Integer getAverageQueueDepth() {
 		return averageQueueDepth;
 	}
 
-	public int getDeepestQueueDepth() {
+	public Integer getDeepestQueueDepth() {
 		return deepestQueueDepth;
 	}
 
-	public int getElapsedMilliseconds() {
+	public Integer getElapsedMilliseconds() {
 		return elapsedMilliseconds;
 	}
 
@@ -182,7 +187,7 @@ public class JobStatusReport {
 		return elapsedPretty;
 	}
 
-	public int getToeCount() {
+	public Integer getToeCount() {
 		return toeCount;
 	}
 
@@ -194,39 +199,39 @@ public class JobStatusReport {
 		return processors;
 	}
 
-	public int getTotalQueues() {
+	public Integer getTotalQueues() {
 		return totalQueues;
 	}
 
-	public int getInProcessQueues() {
+	public Integer getInProcessQueues() {
 		return inProcessQueues;
 	}
 
-	public int getReadyQueues() {
+	public Integer getReadyQueues() {
 		return readyQueues;
 	}
 
-	public int getSnoozedQueues() {
+	public Integer getSnoozedQueues() {
 		return snoozedQueues;
 	}
 
-	public int getActiveQueues() {
+	public Integer getActiveQueues() {
 		return activeQueues;
 	}
 
-	public int getInactiveQueues() {
+	public Integer getInactiveQueues() {
 		return inactiveQueues;
 	}
 
-	public int getIneligibleQueues() {
+	public Integer getIneligibleQueues() {
 		return ineligibleQueues;
 	}
 
-	public int getRetiredQueues() {
+	public Integer getRetiredQueues() {
 		return retiredQueues;
 	}
 
-	public int getExhaustedQueues() {
+	public Integer getExhaustedQueues() {
 		return exhaustedQueues;
 	}
 
@@ -239,52 +244,108 @@ public class JobStatusReport {
 		JobStatusReport.Builder builder = new JobStatusReport.Builder();
 		try {
 			builder.warcWriterDirectory(xPath.evaluate("//value[key/text()='warcWriter.directory']/path", document));
-			builder.status(xPath.evaluate("//job/statusDescription", document));
+			
+			String basePath = "//job";
+			
+			builder.status(xPath.evaluate(basePath + "/statusDescription", document));
+			
+			String baseUriTotalsReport = basePath + "/uriTotalsReport";
+			builder.downloadedUriCount(NumberUtils.createInteger(xPath.evaluate(baseUriTotalsReport + "/downloadedUriCount", document)));
+			builder.queuedUriCount(NumberUtils.createInteger(xPath.evaluate(baseUriTotalsReport + "/queuedUriCount", document)));
+			builder.totalUriCount(NumberUtils.createInteger(xPath.evaluate(baseUriTotalsReport + "/totalUriCount", document)));
+			builder.futureUriCount(NumberUtils.createInteger(xPath.evaluate(baseUriTotalsReport + "/futureUriCount", document)));
+			
+			String baseSizeTotalsReport = basePath + "/sizeTotalsReport";
+			builder.dupByHash(NumberUtils.createInteger(xPath.evaluate(baseSizeTotalsReport + "/dupByHash", document)));
+			builder.dupByHashCount(NumberUtils.createInteger(xPath.evaluate(baseSizeTotalsReport + "/dupByHashCount", document)));
+			builder.notModified(NumberUtils.createInteger(xPath.evaluate(baseSizeTotalsReport + "/notModified", document)));
+			builder.notModifiedCount(NumberUtils.createInteger(xPath.evaluate(baseSizeTotalsReport + "/notModifiedCount", document)));
+			builder.novel(NumberUtils.createInteger(xPath.evaluate(baseSizeTotalsReport + "/novel", document)));
+			builder.novelCount(NumberUtils.createInteger(xPath.evaluate(baseSizeTotalsReport + "/novelCount", document)));
+			builder.total(NumberUtils.createInteger(xPath.evaluate(baseSizeTotalsReport + "/total", document)));
+			builder.totalCount(NumberUtils.createInteger(xPath.evaluate(baseSizeTotalsReport + "/totalCount", document)));
+		
+			String baseRateReport = basePath + "/rateReport";
+			builder.currentDocsPerSecond(NumberUtils.createDouble(xPath.evaluate(baseRateReport + "/currentDocsPerSecond", document)));
+			builder.averageDocsPerSecond(NumberUtils.createDouble(xPath.evaluate(baseRateReport + "/averageDocsPerSecond", document)));
+			builder.currentKiBPerSec(NumberUtils.createInteger(xPath.evaluate(baseRateReport + "/currentKiBPerSec", document)));
+			builder.averageKiBPerSec(NumberUtils.createInteger(xPath.evaluate(baseRateReport + "/currentKiBPerSec", document)));
+			
+			String baseLoadReport = basePath + "/loadReport";
+			builder.busyThreads(NumberUtils.createInteger(xPath.evaluate(baseLoadReport + "/busyThreads", document)));
+			builder.totalThreads(NumberUtils.createInteger(xPath.evaluate(baseLoadReport + "/totalThreads", document)));
+			builder.congestionRatio(NumberUtils.createDouble(xPath.evaluate(baseLoadReport + "/congestionRatio", document)));
+			builder.averageQueueDepth(NumberUtils.createInteger(xPath.evaluate(baseLoadReport + "/averageQueueDepth", document)));
+			builder.deepestQueueDepth(NumberUtils.createInteger(xPath.evaluate(baseLoadReport + "/deepestQueueDepth", document)));
+			
+			String baseElapsedReport = basePath + "/elapsedReport";
+			builder.elapsedMilliseconds(NumberUtils.createInteger(xPath.evaluate(baseElapsedReport + "/elapsedMilliseconds", document)));
+			builder.elapsedPretty(xPath.evaluate(baseElapsedReport + "/elapsedPretty", document));
+			
+			String baseThreadReport = basePath + "/threadReport";
+			builder.toeCount(NumberUtils.createInteger(xPath.evaluate(baseThreadReport + "/toeCount", document)));
+			
+			String baseFrontierReport = basePath + "/frontierReport";
+			builder.totalQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/totalQueues", document)));
+			builder.inProcessQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/inProcessQueues", document)));
+			builder.readyQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/readyQueues", document)));
+			builder.snoozedQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/snoozedQueues", document)));
+			builder.activeQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/activeQueues", document)));
+			builder.inactiveQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/inactiveQueues", document)));
+			builder.ineligibleQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/ineligibleQueues", document)));
+			builder.retiredQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/retiredQueues", document)));
+			builder.exhaustedQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/exhaustedQueues", document)));
+			builder.lastReachedState(xPath.evaluate(baseFrontierReport + "/lastReachedState", document));
+				
+	
+			
+
+		
 		} catch (XPathExpressionException e) {
 			logger.error("status document not in expected format", e);
 		}
 		return builder.build();
 	}
-
+	
 	public static class Builder {
 		private String job;
 		private String status;
 		private String warcWriterDirectory;
-		private int downloadedUriCount;
-		private int queuedUriCount;
-		private int totalUriCount;
-		private int futureUriCount;
-		private int dupByHash;
-		private int dupByHashCount;
-		private int notModified;
-		private int notModifiedCount;
-		private int novel;
-		private int novelCount;
-		private int total;
-		private int totalCount;
-		private double currentDocsPerSecond;
-		private double averageDocsPerSecond;
-		private int currentKiBPerSec;
-		private int averageKiBPerSec;
-		private int busyThreads;
-		private int totalThreads;
-		private double congestionRatio;
-		private int averageQueueDepth;
-		private int deepestQueueDepth;
-		private int elapsedMilliseconds;
+		private Integer downloadedUriCount;
+		private Integer queuedUriCount;
+		private Integer totalUriCount;
+		private Integer futureUriCount;
+		private Integer dupByHash;
+		private Integer dupByHashCount;
+		private Integer notModified;
+		private Integer notModifiedCount;
+		private Integer novel;
+		private Integer novelCount;
+		private Integer total;
+		private Integer totalCount;
+		private Double currentDocsPerSecond;
+		private Double averageDocsPerSecond;
+		private Integer currentKiBPerSec;
+		private Integer averageKiBPerSec;
+		private Integer busyThreads;
+		private Integer totalThreads;
+		private Double congestionRatio;
+		private Integer averageQueueDepth;
+		private Integer deepestQueueDepth;
+		private Integer elapsedMilliseconds;
 		private String elapsedPretty;
-		private int toeCount;
+		private Integer toeCount;
 		private List<String> steps;
 		private List<String> processors;
-		private int totalQueues;
-		private int inProcessQueues;
-		private int readyQueues;
-		private int snoozedQueues;
-		private int activeQueues;
-		private int inactiveQueues;
-		private int ineligibleQueues;
-		private int retiredQueues;
-		private int exhaustedQueues;
+		private Integer totalQueues;
+		private Integer inProcessQueues;
+		private Integer readyQueues;
+		private Integer snoozedQueues;
+		private Integer activeQueues;
+		private Integer inactiveQueues;
+		private Integer ineligibleQueues;
+		private Integer retiredQueues;
+		private Integer exhaustedQueues;
 		private String lastReachedState;
 
 		public Builder job(String job) {
@@ -302,112 +363,112 @@ public class JobStatusReport {
 			return this;
 		}
 
-		public Builder downloadedUriCount(int downloadedUriCount) {
+		public Builder downloadedUriCount(Integer downloadedUriCount) {
 			this.downloadedUriCount = downloadedUriCount;
 			return this;
 		}
 
-		public Builder queuedUriCount(int queuedUriCount) {
+		public Builder queuedUriCount(Integer queuedUriCount) {
 			this.queuedUriCount = queuedUriCount;
 			return this;
 		}
 
-		public Builder totalUriCount(int totalUriCount) {
+		public Builder totalUriCount(Integer totalUriCount) {
 			this.totalUriCount = totalUriCount;
 			return this;
 		}
 
-		public Builder futureUriCount(int futureUriCount) {
+		public Builder futureUriCount(Integer futureUriCount) {
 			this.futureUriCount = futureUriCount;
 			return this;
 		}
 
-		public Builder dupByHash(int dupByHash) {
+		public Builder dupByHash(Integer dupByHash) {
 			this.dupByHash = dupByHash;
 			return this;
 		}
 
-		public Builder dupByHashCount(int dupByHashCount) {
+		public Builder dupByHashCount(Integer dupByHashCount) {
 			this.dupByHashCount = dupByHashCount;
 			return this;
 		}
 
-		public Builder notModified(int notModified) {
+		public Builder notModified(Integer notModified) {
 			this.notModified = notModified;
 			return this;
 		}
 
-		public Builder notModifiedCount(int notModifiedCount) {
+		public Builder notModifiedCount(Integer notModifiedCount) {
 			this.notModifiedCount = notModifiedCount;
 			return this;
 		}
 
-		public Builder novel(int novel) {
+		public Builder novel(Integer novel) {
 			this.novel = novel;
 			return this;
 		}
 
-		public Builder novelCount(int novelCount) {
+		public Builder novelCount(Integer novelCount) {
 			this.novelCount = novelCount;
 			return this;
 		}
 
-		public Builder total(int total) {
+		public Builder total(Integer total) {
 			this.total = total;
 			return this;
 		}
 
-		public Builder totalCount(int totalCount) {
+		public Builder totalCount(Integer totalCount) {
 			this.totalCount = totalCount;
 			return this;
 		}
 
-		public Builder currentDocsPerSecond(double currentDocsPerSecond) {
+		public Builder currentDocsPerSecond(Double currentDocsPerSecond) {
 			this.currentDocsPerSecond = currentDocsPerSecond;
 			return this;
 		}
 
-		public Builder averageDocsPerSecond(double averageDocsPerSecond) {
+		public Builder averageDocsPerSecond(Double averageDocsPerSecond) {
 			this.averageDocsPerSecond = averageDocsPerSecond;
 			return this;
 		}
 
-		public Builder currentKiBPerSec(int currentKiBPerSec) {
+		public Builder currentKiBPerSec(Integer currentKiBPerSec) {
 			this.currentKiBPerSec = currentKiBPerSec;
 			return this;
 		}
 
-		public Builder averageKiBPerSec(int averageKiBPerSec) {
+		public Builder averageKiBPerSec(Integer averageKiBPerSec) {
 			this.averageKiBPerSec = averageKiBPerSec;
 			return this;
 		}
 
-		public Builder busyThreads(int busyThreads) {
+		public Builder busyThreads(Integer busyThreads) {
 			this.busyThreads = busyThreads;
 			return this;
 		}
 
-		public Builder totalThreads(int totalThreads) {
+		public Builder totalThreads(Integer totalThreads) {
 			this.totalThreads = totalThreads;
 			return this;
 		}
 
-		public Builder congestionRatio(double congestionRatio) {
+		public Builder congestionRatio(Double congestionRatio) {
 			this.congestionRatio = congestionRatio;
 			return this;
 		}
 
-		public Builder averageQueueDepth(int averageQueueDepth) {
+		public Builder averageQueueDepth(Integer averageQueueDepth) {
 			this.averageQueueDepth = averageQueueDepth;
 			return this;
 		}
 
-		public Builder deepestQueueDepth(int deepestQueueDepth) {
+		public Builder deepestQueueDepth(Integer deepestQueueDepth) {
 			this.deepestQueueDepth = deepestQueueDepth;
 			return this;
 		}
 
-		public Builder elapsedMilliseconds(int elapsedMilliseconds) {
+		public Builder elapsedMilliseconds(Integer elapsedMilliseconds) {
 			this.elapsedMilliseconds = elapsedMilliseconds;
 			return this;
 		}
@@ -417,7 +478,7 @@ public class JobStatusReport {
 			return this;
 		}
 
-		public Builder toeCount(int toeCount) {
+		public Builder toeCount(Integer toeCount) {
 			this.toeCount = toeCount;
 			return this;
 		}
@@ -432,47 +493,47 @@ public class JobStatusReport {
 			return this;
 		}
 
-		public Builder totalQueues(int totalQueues) {
+		public Builder totalQueues(Integer totalQueues) {
 			this.totalQueues = totalQueues;
 			return this;
 		}
 
-		public Builder inProcessQueues(int inProcessQueues) {
+		public Builder inProcessQueues(Integer inProcessQueues) {
 			this.inProcessQueues = inProcessQueues;
 			return this;
 		}
 
-		public Builder readyQueues(int readyQueues) {
+		public Builder readyQueues(Integer readyQueues) {
 			this.readyQueues = readyQueues;
 			return this;
 		}
 
-		public Builder snoozedQueues(int snoozedQueues) {
+		public Builder snoozedQueues(Integer snoozedQueues) {
 			this.snoozedQueues = snoozedQueues;
 			return this;
 		}
 
-		public Builder activeQueues(int activeQueues) {
+		public Builder activeQueues(Integer activeQueues) {
 			this.activeQueues = activeQueues;
 			return this;
 		}
 
-		public Builder inactiveQueues(int inactiveQueues) {
+		public Builder inactiveQueues(Integer inactiveQueues) {
 			this.inactiveQueues = inactiveQueues;
 			return this;
 		}
 
-		public Builder ineligibleQueues(int ineligibleQueues) {
+		public Builder ineligibleQueues(Integer ineligibleQueues) {
 			this.ineligibleQueues = ineligibleQueues;
 			return this;
 		}
 
-		public Builder retiredQueues(int retiredQueues) {
+		public Builder retiredQueues(Integer retiredQueues) {
 			this.retiredQueues = retiredQueues;
 			return this;
 		}
 
-		public Builder exhaustedQueues(int exhaustedQueues) {
+		public Builder exhaustedQueues(Integer exhaustedQueues) {
 			this.exhaustedQueues = exhaustedQueues;
 			return this;
 		}
