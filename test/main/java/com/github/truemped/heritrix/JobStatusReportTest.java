@@ -91,13 +91,11 @@ public class JobStatusReportTest {
 		assertNotNull(elapsedPretty); 
 		
 		Integer toeCount = jobStatusReport.getToeCount();
-		List<String> steps = jobStatusReport.getSteps();
-		List<String> processors = jobStatusReport.getProcessors();
+		String steps = jobStatusReport.getSteps();
+		String processors = jobStatusReport.getProcessors();
 		assertNotNull(toeCount);    
-		//assertNotNull(steps); 
-		//assertNotEquals(0, steps.size());
-		//assertNotNull(processors); 
-		//assertNotEquals(0, processors.size());
+		assertNotNull(steps); 
+		assertNotNull(processors); 
 		
 		Integer totalQueues = jobStatusReport.getTotalQueues();
 		Integer inProcessQueues = jobStatusReport.getInProcessQueues();

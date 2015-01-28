@@ -66,8 +66,8 @@ public class JobStatusReport {
 
 	// thread report
 	private Integer toeCount;
-	private List<String> steps; // might need to contain an enum
-	private List<String> processors; // might need to contain an enum
+	private String steps; // might need to contain an enum
+	private String processors; // might need to contain an enum
 
 	// frontier report
 	private Integer totalQueues;
@@ -191,11 +191,11 @@ public class JobStatusReport {
 		return toeCount;
 	}
 
-	public List<String> getSteps() {
+	public String getSteps() {
 		return steps;
 	}
 
-	public List<String> getProcessors() {
+	public String getProcessors() {
 		return processors;
 	}
 
@@ -284,6 +284,8 @@ public class JobStatusReport {
 			
 			String baseThreadReport = basePath + "/threadReport";
 			builder.toeCount(NumberUtils.createInteger(xPath.evaluate(baseThreadReport + "/toeCount", document)));
+			builder.steps(xPath.evaluate(baseThreadReport + "/steps/value", document));
+			builder.processors(xPath.evaluate(baseThreadReport + "/processors/value", document));
 			
 			String baseFrontierReport = basePath + "/frontierReport";
 			builder.totalQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/totalQueues", document)));
@@ -296,11 +298,6 @@ public class JobStatusReport {
 			builder.retiredQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/retiredQueues", document)));
 			builder.exhaustedQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/exhaustedQueues", document)));
 			builder.lastReachedState(xPath.evaluate(baseFrontierReport + "/lastReachedState", document));
-				
-	
-			
-
-		
 		} catch (XPathExpressionException e) {
 			logger.error("status document not in expected format", e);
 		}
@@ -335,8 +332,8 @@ public class JobStatusReport {
 		private Integer elapsedMilliseconds;
 		private String elapsedPretty;
 		private Integer toeCount;
-		private List<String> steps;
-		private List<String> processors;
+		private String steps;
+		private String processors;
 		private Integer totalQueues;
 		private Integer inProcessQueues;
 		private Integer readyQueues;
@@ -483,12 +480,12 @@ public class JobStatusReport {
 			return this;
 		}
 
-		public Builder steps(List<String> steps) {
+		public Builder steps(String steps) {
 			this.steps = steps;
 			return this;
 		}
 
-		public Builder processors(List<String> processors) {
+		public Builder processors(String processors) {
 			this.processors = processors;
 			return this;
 		}
