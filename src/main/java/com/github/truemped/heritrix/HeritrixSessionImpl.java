@@ -384,6 +384,9 @@ public class HeritrixSessionImpl implements HeritrixSession {
 				if (st.equals(res)){
 					return true;
 				}
+				else {
+					LOG.debug("Status was " + st + " expecting " + status);
+				}
 			}
         } catch (XPathExpressionException e) {
             LOG.error("status document not in expected format", e);
