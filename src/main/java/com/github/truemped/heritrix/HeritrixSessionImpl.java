@@ -385,7 +385,7 @@ public class HeritrixSessionImpl implements HeritrixSession {
 					return true;
 				}
 				else {
-					LOG.debug("Status was " + st + " expecting " + status);
+					LOG.debug("Status was " + res + " expecting " + st);
 				}
 			}
         } catch (XPathExpressionException e) {
