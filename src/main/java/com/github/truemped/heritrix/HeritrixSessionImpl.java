@@ -476,7 +476,7 @@ public class HeritrixSessionImpl implements HeritrixSession {
     @Override
     public boolean launchJob(final String jobName) {
         final Document doc = postXml(this.baseUrl + "job/" + jobName, new BasicNameValuePair("action", "launch"));
-        return checkStatusDocument(doc, "Active: PREPARING");
+        return checkStatusDocument(doc, "Active: PREPARING", "Ready");
     }
     
    
