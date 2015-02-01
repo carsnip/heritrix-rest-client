@@ -15,7 +15,6 @@ import org.w3c.dom.Document;
  */
 public class JobStatusReport {
 	private static final Logger logger = LoggerFactory.getLogger(JobStatusReport.class);
-	private static final Integer INITIAL_INT_VALUE = -1;
 	
 	// identify the job
 	private String job;
@@ -245,58 +244,84 @@ public class JobStatusReport {
 			builder.status(xPath.evaluate(basePath + "/statusDescription", document));
 			
 			String baseUriTotalsReport = basePath + "/uriTotalsReport";
-			builder.downloadedUriCount(NumberUtils.createInteger(xPath.evaluate(baseUriTotalsReport + "/downloadedUriCount", document)));
-			builder.queuedUriCount(NumberUtils.createInteger(xPath.evaluate(baseUriTotalsReport + "/queuedUriCount", document)));
-			builder.totalUriCount(NumberUtils.createInteger(xPath.evaluate(baseUriTotalsReport + "/totalUriCount", document)));
-			builder.futureUriCount(NumberUtils.createInteger(xPath.evaluate(baseUriTotalsReport + "/futureUriCount", document)));
+			builder.downloadedUriCount(tryCreateIntegerFromDocumentPath(xPath, baseUriTotalsReport + "/downloadedUriCount", document));
+			builder.queuedUriCount(tryCreateIntegerFromDocumentPath(xPath, baseUriTotalsReport + "/queuedUriCount", document));
+			builder.totalUriCount(tryCreateIntegerFromDocumentPath(xPath, baseUriTotalsReport + "/totalUriCount", document));
+			builder.futureUriCount(tryCreateIntegerFromDocumentPath(xPath, baseUriTotalsReport + "/futureUriCount", document));
 			
 			String baseSizeTotalsReport = basePath + "/sizeTotalsReport";
-			builder.dupByHash(NumberUtils.createInteger(xPath.evaluate(baseSizeTotalsReport + "/dupByHash", document)));
-			builder.dupByHashCount(NumberUtils.createInteger(xPath.evaluate(baseSizeTotalsReport + "/dupByHashCount", document)));
-			builder.notModified(NumberUtils.createInteger(xPath.evaluate(baseSizeTotalsReport + "/notModified", document)));
-			builder.notModifiedCount(NumberUtils.createInteger(xPath.evaluate(baseSizeTotalsReport + "/notModifiedCount", document)));
-			builder.novel(NumberUtils.createInteger(xPath.evaluate(baseSizeTotalsReport + "/novel", document)));
-			builder.novelCount(NumberUtils.createInteger(xPath.evaluate(baseSizeTotalsReport + "/novelCount", document)));
-			builder.total(NumberUtils.createInteger(xPath.evaluate(baseSizeTotalsReport + "/total", document)));
-			builder.totalCount(NumberUtils.createInteger(xPath.evaluate(baseSizeTotalsReport + "/totalCount", document)));
+			builder.dupByHash(tryCreateIntegerFromDocumentPath(xPath, baseSizeTotalsReport + "/dupByHash", document));
+			builder.dupByHashCount(tryCreateIntegerFromDocumentPath(xPath, baseSizeTotalsReport + "/dupByHashCount", document));
+			builder.notModified(tryCreateIntegerFromDocumentPath(xPath, baseSizeTotalsReport + "/notModified", document));
+			builder.notModifiedCount(tryCreateIntegerFromDocumentPath(xPath, baseSizeTotalsReport + "/notModifiedCount", document));
+			builder.novel(tryCreateIntegerFromDocumentPath(xPath, baseSizeTotalsReport + "/novel", document));
+			builder.novelCount(tryCreateIntegerFromDocumentPath(xPath, baseSizeTotalsReport + "/novelCount", document));
+			builder.total(tryCreateIntegerFromDocumentPath(xPath, baseSizeTotalsReport + "/total", document));
+			builder.totalCount(tryCreateIntegerFromDocumentPath(xPath, baseSizeTotalsReport + "/totalCount", document));
 		
 			String baseRateReport = basePath + "/rateReport";
-			builder.currentDocsPerSecond(NumberUtils.createDouble(xPath.evaluate(baseRateReport + "/currentDocsPerSecond", document)));
-			builder.averageDocsPerSecond(NumberUtils.createDouble(xPath.evaluate(baseRateReport + "/averageDocsPerSecond", document)));
-			builder.currentKiBPerSec(NumberUtils.createInteger(xPath.evaluate(baseRateReport + "/currentKiBPerSec", document)));
-			builder.averageKiBPerSec(NumberUtils.createInteger(xPath.evaluate(baseRateReport + "/currentKiBPerSec", document)));
+			builder.currentDocsPerSecond(tryCreateDoubleFromDocumentPath(xPath, baseRateReport + "/currentDocsPerSecond", document));
+			builder.averageDocsPerSecond(tryCreateDoubleFromDocumentPath(xPath, baseRateReport + "/averageDocsPerSecond", document));
+			builder.currentKiBPerSec(tryCreateIntegerFromDocumentPath(xPath, baseRateReport + "/currentKiBPerSec", document));
+			builder.averageKiBPerSec(tryCreateIntegerFromDocumentPath(xPath, baseRateReport + "/currentKiBPerSec", document));
 			
 			String baseLoadReport = basePath + "/loadReport";
-			builder.busyThreads(NumberUtils.createInteger(xPath.evaluate(baseLoadReport + "/busyThreads", document)));
-			builder.totalThreads(NumberUtils.createInteger(xPath.evaluate(baseLoadReport + "/totalThreads", document)));
-			builder.congestionRatio(NumberUtils.createDouble(xPath.evaluate(baseLoadReport + "/congestionRatio", document)));
-			builder.averageQueueDepth(NumberUtils.createInteger(xPath.evaluate(baseLoadReport + "/averageQueueDepth", document)));
-			builder.deepestQueueDepth(NumberUtils.createInteger(xPath.evaluate(baseLoadReport + "/deepestQueueDepth", document)));
+			builder.busyThreads(tryCreateIntegerFromDocumentPath(xPath, baseLoadReport + "/busyThreads", document));
+			builder.totalThreads(tryCreateIntegerFromDocumentPath(xPath, baseLoadReport + "/totalThreads", document));
+			builder.congestionRatio(tryCreateDoubleFromDocumentPath(xPath, baseLoadReport + "/congestionRatio", document));
+			builder.averageQueueDepth(tryCreateIntegerFromDocumentPath(xPath, baseLoadReport + "/averageQueueDepth", document));
+			builder.deepestQueueDepth(tryCreateIntegerFromDocumentPath(xPath, baseLoadReport + "/deepestQueueDepth", document));
 			
 			String baseElapsedReport = basePath + "/elapsedReport";
-			builder.elapsedMilliseconds(NumberUtils.createInteger(xPath.evaluate(baseElapsedReport + "/elapsedMilliseconds", document)));
+			builder.elapsedMilliseconds(tryCreateIntegerFromDocumentPath(xPath, baseElapsedReport + "/elapsedMilliseconds", document));
 			builder.elapsedPretty(xPath.evaluate(baseElapsedReport + "/elapsedPretty", document));
 			
 			String baseThreadReport = basePath + "/threadReport";
-			builder.toeCount(NumberUtils.createInteger(xPath.evaluate(baseThreadReport + "/toeCount", document)));
+			builder.toeCount(tryCreateIntegerFromDocumentPath(xPath, baseThreadReport + "/toeCount", document));
 			builder.steps(xPath.evaluate(baseThreadReport + "/steps/value", document));
 			builder.processors(xPath.evaluate(baseThreadReport + "/processors/value", document));
 			
 			String baseFrontierReport = basePath + "/frontierReport";
-			builder.totalQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/totalQueues", document)));
-			builder.inProcessQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/inProcessQueues", document)));
-			builder.readyQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/readyQueues", document)));
-			builder.snoozedQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/snoozedQueues", document)));
-			builder.activeQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/activeQueues", document)));
-			builder.inactiveQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/inactiveQueues", document)));
-			builder.ineligibleQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/ineligibleQueues", document)));
-			builder.retiredQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/retiredQueues", document)));
-			builder.exhaustedQueues(NumberUtils.createInteger(xPath.evaluate(baseFrontierReport + "/exhaustedQueues", document)));
+			builder.totalQueues(tryCreateIntegerFromDocumentPath(xPath, baseFrontierReport + "/totalQueues", document));
+			builder.inProcessQueues(tryCreateIntegerFromDocumentPath(xPath, baseFrontierReport + "/inProcessQueues", document));
+			builder.readyQueues(tryCreateIntegerFromDocumentPath(xPath, baseFrontierReport + "/readyQueues", document));
+			builder.snoozedQueues(tryCreateIntegerFromDocumentPath(xPath, baseFrontierReport + "/snoozedQueues", document));
+			builder.activeQueues(tryCreateIntegerFromDocumentPath(xPath, baseFrontierReport + "/activeQueues", document));
+			builder.inactiveQueues(tryCreateIntegerFromDocumentPath(xPath, baseFrontierReport + "/inactiveQueues", document));
+			builder.ineligibleQueues(tryCreateIntegerFromDocumentPath(xPath, baseFrontierReport + "/ineligibleQueues", document));
+			builder.retiredQueues(tryCreateIntegerFromDocumentPath(xPath, baseFrontierReport + "/retiredQueues", document));
+			builder.exhaustedQueues(tryCreateIntegerFromDocumentPath(xPath, baseFrontierReport + "/exhaustedQueues", document));
 			builder.lastReachedState(xPath.evaluate(baseFrontierReport + "/lastReachedState", document));
 		} catch (XPathExpressionException e) {
 			logger.error("status document not in expected format", e);
 		}
 		return builder.build();
+	}
+	
+	/**
+	 * Try and create an integer from an xpath into the document.
+	 * @param xPath
+	 * @param path
+	 * @param document
+	 * @return null if result of xpath is null or a blank string, or not a valid number
+	 * @throws XPathExpressionException
+	 */
+	private static Integer tryCreateIntegerFromDocumentPath(XPath xPath, String path,  Document document) throws XPathExpressionException {
+		try {
+			return NumberUtils.createInteger(xPath.evaluate(path, document));
+		}
+		catch (NumberFormatException e){
+			return null;
+		}
+	}
+	
+	private static Double tryCreateDoubleFromDocumentPath(XPath xPath, String path,  Document document) throws XPathExpressionException {
+		try {
+			return NumberUtils.createDouble(xPath.evaluate(path, document));
+		}
+		catch (NumberFormatException e){
+			return null;
+		}
 	}
 	
 	public static class Builder {

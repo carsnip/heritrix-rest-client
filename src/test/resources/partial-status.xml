@@ -1,0 +1,265 @@
+<?xml version="1.0" standalone='yes'?>
+
+<job>
+  <shortName>d6d9485e-7cb7-438b-a66c-c9a5261d8ba4</shortName>
+  <crawlControllerState>EMPTY</crawlControllerState>
+  <statusDescription>Active: EMPTY</statusDescription>
+  <availableActions>
+    <value>pause</value>
+    <value>checkpoint</value>
+    <value>terminate</value>
+    <value>teardown</value>
+  </availableActions>
+  <launchCount>1</launchCount>
+  <lastLaunch>2015-01-22T09:46:12.294Z</lastLaunch>
+  <isProfile>false</isProfile>
+  <primaryConfig>/jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/crawler-beans.cxml</primaryConfig>
+  <primaryConfigUrl>https://192.168.59.103:49189/engine/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/jobdir/crawler-beans.cxml</primaryConfigUrl>
+  <url>https://192.168.59.103:49189/engine/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4</url>
+  <jobLogTail>
+    <value>2015-01-22T09:46:29.330Z INFO EMPTY 20150122094613</value>
+    <value>2015-01-22T09:46:29.328Z INFO STOPPING 20150122094613</value>
+    <value>2015-01-22T09:46:14.996Z INFO RUNNING 20150122094613</value>
+    <value>2015-01-22T09:46:14.492Z INFO PAUSED 20150122094613</value>
+    <value>2015-01-22T09:46:14.338Z INFO PREPARING 20150122094613</value>
+  </jobLogTail>
+  <uriTotalsReport>
+    <downloadedUriCount>4</downloadedUriCount>
+    <queuedUriCount>0</queuedUriCount>
+    <totalUriCount>4</totalUriCount>
+    <futureUriCount>0</futureUriCount>
+  </uriTotalsReport>
+  <sizeTotalsReport>
+    <dupByHash>0</dupByHash>
+    <dupByHashCount>0</dupByHashCount>
+    <notModified>0</notModified>
+    <notModifiedCount>0</notModifiedCount>
+    <novel>84951</novel>
+    <novelCount>4</novelCount>
+    <total>84951</total>
+    <totalCount>4</totalCount>
+  </sizeTotalsReport>
+  <rateReport>
+    <currentDocsPerSecond>0.26001040041601664</currentDocsPerSecond>
+    <averageDocsPerSecond>0.2663825253063399</averageDocsPerSecond>
+    <currentKiBPerSec>5</currentKiBPerSec>
+    <averageKiBPerSec>5</averageKiBPerSec>
+  </rateReport>
+  <loadReport>
+    <busyThreads>0</busyThreads>
+    <totalThreads>25</totalThreads>
+    <congestionRatio>1.0</congestionRatio>
+    <averageQueueDepth>0</averageQueueDepth>
+    <deepestQueueDepth>0</deepestQueueDepth>
+  </loadReport>
+  <elapsedReport>
+    <elapsedMilliseconds>15017</elapsedMilliseconds>
+    <elapsedPretty>15s17ms</elapsedPretty>
+  </elapsedReport>
+  <threadReport>
+    <toeCount></toeCount>
+    <steps>
+      <value>25 ABOUT_TO_GET_URI</value>
+    </steps>
+    <processors>
+      <value>25 noActiveProcessor</value>
+    </processors>
+  </threadReport>
+  <frontierReport>
+    <totalQueues>1</totalQueues>
+    <inProcessQueues>0</inProcessQueues>
+    <readyQueues>0</readyQueues>
+    <snoozedQueues>1</snoozedQueues>
+    <activeQueues>1</activeQueues>
+    <inactiveQueues>0</inactiveQueues>
+    <ineligibleQueues>0</ineligibleQueues>
+    <retiredQueues>0</retiredQueues>
+    <exhaustedQueues>0</exhaustedQueues>
+    <lastReachedState>EMPTY</lastReachedState>
+  </frontierReport>
+  <crawlLogTail>
+    <value>2015-01-22T09:46:28.454Z   200          1 http://www.mysite.co.uk/favicon.ico PI http://www.mysite.co.uk/robots.txt image/x-icon #004 20150122094628365+81 sha1:RTM2I4QFK6LQHCVLPE2Y4LLOAA2QLNQV - -</value>
+    <value>2015-01-22T09:46:23.210Z   200          1 http://www.mysite.co.uk/a-url - - text/html #001 20150122094622170+1029 sha1:DGGRTT7RDVPLK2S4KV3HPGQ6CROHLG4J - 3t</value>
+    <value>2015-01-22T09:46:19.150Z   200          1 http://www.mysite.co.uk/robots.txt P http://www.mysite.co.uk/a-url text/plain #001 20150122094618966+176 sha1:3XXC7RE5MJT7PIR465RSDNCX77RORKLL - -</value>
+    <value>2015-01-22T09:46:15.953Z     1         60 dns:www.mysite.co.uk P http://www.mysite.co.uk/a-url text/dns #001 20150122094615340+95 sha1:J5I5YWOXDO7OWCLUU34GQENTDF7XY5OC - -</value>
+  </crawlLogTail>
+  <configFiles>
+    <value>
+      <key>acceptSurts.surtsDumpFile</key>
+      <name>surtsDumpFile</name>
+      <path>/jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/20150122094613/surts.dump</path>
+      <url>https://192.168.59.103:49189/engine/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/engine/anypath//jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/20150122094613/surts.dump</url>
+      <editable>false</editable>
+    </value>
+    <value>
+      <key>loggerModule.crawlLogPath</key>
+      <name>crawl.log</name>
+      <path>/logs/20150122094613/crawl.log</path>
+      <url>https://192.168.59.103:49189/engine/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/engine/anypath//logs/20150122094613/crawl.log</url>
+      <editable>false</editable>
+    </value>
+    <value>
+      <key>seeds.textSource</key>
+      <name>seeds.textSource</name>
+      <path>/jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/seeds.txt</path>
+      <url>https://192.168.59.103:49189/engine/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/engine/anypath//jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/seeds.txt</url>
+      <editable>true</editable>
+    </value>
+    <value>
+      <key>actionDirectory.actionDir</key>
+      <name>ActionDirectory source directory</name>
+      <path>/jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/action</path>
+      <url>https://192.168.59.103:49189/engine/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/engine/anypath//jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/action</url>
+      <editable>false</editable>
+    </value>
+    <value>
+      <key>loggerModule.path</key>
+      <name>logs subdirectory</name>
+      <path>/logs/20150122094613</path>
+      <url>https://192.168.59.103:49189/engine/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/engine/anypath//logs/20150122094613</url>
+      <editable>false</editable>
+    </value>
+    <value>
+      <key>loggerModule.nonfatalErrorsLogPath</key>
+      <name>nonfatal-errors.log</name>
+      <path>/logs/20150122094613/nonfatal-errors.log</path>
+      <url>https://192.168.59.103:49189/engine/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/engine/anypath//logs/20150122094613/nonfatal-errors.log</url>
+      <editable>false</editable>
+    </value>
+    <value>
+      <key>statisticsTracker.reportsDir</key>
+      <name>reports subdirectory</name>
+      <path>/jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/20150122094613/reports</path>
+      <url>https://192.168.59.103:49189/engine/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/engine/anypath//jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/20150122094613/reports</url>
+      <editable>false</editable>
+    </value>
+    <value>
+      <key>warcWriter.storePaths[0]</key>
+      <name>warcs default store path</name>
+      <path>/jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/20150122094613/warcs</path>
+      <url>https://192.168.59.103:49189/engine/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/engine/anypath//jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/20150122094613/warcs</url>
+      <editable>false</editable>
+    </value>
+    <value>
+      <key>checkpointService.checkpointsDir</key>
+      <name>checkpoints subdirectory</name>
+      <path>/jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/checkpoints</path>
+      <url>https://192.168.59.103:49189/engine/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/engine/anypath//jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/checkpoints</url>
+      <editable>false</editable>
+    </value>
+    <value>
+      <key>warcWriter.defaultStorePaths[0]</key>
+      <name>warcs default store path</name>
+      <path>/jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/warcs</path>
+      <url>https://192.168.59.103:49189/engine/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/engine/anypath//jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/warcs</url>
+      <editable>false</editable>
+    </value>
+    <value>
+      <key>actionDirectory.doneDir</key>
+      <name>ActionDirectory done directory</name>
+      <path>/jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/20150122094613/actions-done</path>
+      <url>https://192.168.59.103:49189/engine/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/engine/anypath//jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/20150122094613/actions-done</url>
+      <editable>false</editable>
+    </value>
+    <value>
+      <key>crawlController.scratchDir</key>
+      <name>scratch subdirectory</name>
+      <path>/jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/scratch</path>
+      <url>https://192.168.59.103:49189/engine/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/engine/anypath//jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/scratch</url>
+      <editable>false</editable>
+    </value>
+    <value>
+      <key>warcWriter.directory</key>
+      <name>writer base path</name>
+      <path>/jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/20150122094613</path>
+      <url>https://192.168.59.103:49189/engine/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/engine/anypath//jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/20150122094613</url>
+      <editable>false</editable>
+    </value>
+    <value>
+      <key>loggerModule.uriErrorsLogPath</key>
+      <name>uri-errors.log</name>
+      <path>/logs/20150122094613/uri-errors.log</path>
+      <url>https://192.168.59.103:49189/engine/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/engine/anypath//logs/20150122094613/uri-errors.log</url>
+      <editable>false</editable>
+    </value>
+    <value>
+      <key>bdb.dir</key>
+      <name>bdbmodule subdirectory</name>
+      <path>/jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/state</path>
+      <url>https://192.168.59.103:49189/engine/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/engine/anypath//jobs/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/state</url>
+      <editable>false</editable>
+    </value>
+    <value>
+      <key>loggerModule.progressLogPath</key>
+      <name>progress-statistics.log</name>
+      <path>/logs/20150122094613/progress-statistics.log</path>
+      <url>https://192.168.59.103:49189/engine/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/engine/anypath//logs/20150122094613/progress-statistics.log</url>
+      <editable>false</editable>
+    </value>
+    <value>
+      <key>loggerModule.alertsLogPath</key>
+      <name>alerts.log</name>
+      <path>/logs/20150122094613/alerts.log</path>
+      <url>https://192.168.59.103:49189/engine/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/engine/anypath//logs/20150122094613/alerts.log</url>
+      <editable>false</editable>
+    </value>
+    <value>
+      <key>loggerModule.runtimeErrorsLogPath</key>
+      <name>runtime-errors.log</name>
+      <path>/logs/20150122094613/runtime-errors.log</path>
+      <url>https://192.168.59.103:49189/engine/job/d6d9485e-7cb7-438b-a66c-c9a5261d8ba4/engine/anypath//logs/20150122094613/runtime-errors.log</url>
+      <editable>false</editable>
+    </value>
+  </configFiles>
+  <isLaunchInfoPartial>false</isLaunchInfoPartial>
+  <isRunning>true</isRunning>
+  <isLaunchable>false</isLaunchable>
+  <hasApplicationContext>true</hasApplicationContext>
+  <alertCount>1</alertCount>
+  <checkpointFiles></checkpointFiles>
+  <alertLogFilePath>/logs/20150122094613/alerts.log</alertLogFilePath>
+  <crawlLogFilePath>/logs/20150122094613/crawl.log</crawlLogFilePath>
+  <reports>
+    <value>
+      <className>CrawlSummaryReport</className>
+      <shortName>CrawlSummary</shortName>
+    </value>
+    <value>
+      <className>SeedsReport</className>
+      <shortName>Seeds</shortName>
+    </value>
+    <value>
+      <className>HostsReport</className>
+      <shortName>Hosts</shortName>
+    </value>
+    <value>
+      <className>SourceTagsReport</className>
+      <shortName>SourceTags</shortName>
+    </value>
+    <value>
+      <className>MimetypesReport</className>
+      <shortName>Mimetypes</shortName>
+    </value>
+    <value>
+      <className>ResponseCodeReport</className>
+      <shortName>ResponseCode</shortName>
+    </value>
+    <value>
+      <className>ProcessorsReport</className>
+      <shortName>Processors</shortName>
+    </value>
+    <value>
+      <className>FrontierSummaryReport</className>
+      <shortName>FrontierSummary</shortName>
+    </value>
+    <value>
+      <className>ToeThreadsReport</className>
+      <shortName>ToeThreads</shortName>
+    </value>
+  </reports>
+  <heapReport>
+    <usedBytes>51290920</usedBytes>
+    <totalBytes>145227776</totalBytes>
+    <maxBytes>238551040</maxBytes>
+  </heapReport>
+</job>
