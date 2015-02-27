@@ -265,7 +265,7 @@ public class HeritrixSessionImpl implements HeritrixSession {
 	private InputStream debugContent(InputStream content) throws IOException{
     	ByteArrayOutputStream output = new ByteArrayOutputStream();
     	IOUtils.copy(content, output);
-    	LOG.debug("RESPONSE CONTENT: " + output.toString());
+    	LOG.trace("RESPONSE CONTENT: " + output.toString());
     	return new ByteArrayInputStream(output.toByteArray());
     }
 
